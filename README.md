@@ -1,4 +1,4 @@
-# medical-database
+# bil372-medical-database
 
 Optimized solutions for pharmacy business
 
