@@ -8,6 +8,9 @@
       <a class="button-add" v-on:click="navigateEczane()">
           Eczane girişi
       </a>
+      <a class="button-add" v-on:click="navigateMusteri()">
+          Musteri girişi
+      </a>
       <div class="lower-page-div">
         <h1>Thanks for working with us!</h1>
       </div>
@@ -16,7 +19,6 @@
     
     </div>  
 
-    <!-- <SearchCar/> -->
   </div>
 </template>
 
@@ -31,6 +33,13 @@ export default {
     navigateEczane() {
       this.$router.push({
           name: 'EczanePage',
+          params: {
+          }
+      });     
+    },
+    navigateMusteri() {
+      this.$router.push({
+          name: 'MusteriPage',
           params: {
           }
       });     
