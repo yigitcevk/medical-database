@@ -14,7 +14,7 @@ from . import conn
 
 
 @controller.route('/eczane', methods=['get'])
-def brands():
+def eczane():
     cur = conn.cursor()
     cur.execute('''select * from eczane;''')
     eczaneler = cur.fetchall()
@@ -28,7 +28,7 @@ def brands():
 
 
 @controller.route('/personel', methods=['get'])
-def brands():
+def personel():
     cur = conn.cursor()
     cur.execute('''select * from personel;''')
     personeller = cur.fetchall()
@@ -41,7 +41,7 @@ def brands():
     return jsonify(result)
 
 @controller.route('/adres', methods=['get'])
-def brands():
+def adres():
     cur = conn.cursor()
     cur.execute('''select * from adres;''')
     adresler = cur.fetchall()
@@ -54,7 +54,7 @@ def brands():
     return jsonify(result)
 
 @controller.route('/eczaci', methods=['get'])
-def brands():
+def eczaci():
     cur = conn.cursor()
     cur.execute('''select * from eczaci;''')
     eczacilar = cur.fetchall()
@@ -67,7 +67,7 @@ def brands():
     return jsonify(result)
 
 @controller.route('/ilac', methods=['get'])
-def brands():
+def ilac():
     cur = conn.cursor()
     cur.execute('''select * from ilac;''')
     ilaclar = cur.fetchall()
@@ -80,7 +80,7 @@ def brands():
     return jsonify(result)
 
 @controller.route('/hasta', methods=['get'])
-def brands():
+def hasta():
     cur = conn.cursor()
     cur.execute('''select * from hasta;''')
     hastalar = cur.fetchall()
