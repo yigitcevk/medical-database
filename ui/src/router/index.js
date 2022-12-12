@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import Home from '../views/Home.vue'
 import EczanePage from '../views/EczanePage.vue'
 import MusteriPage from '../views/MusteriPage.vue'
+import EczaneAdmin from '../views/EczaneAdmin.vue'
 
 
 
@@ -20,6 +21,11 @@ const routes = [
     path: '/musteripage',
     name: 'MusteriPage',
     component: MusteriPage
+  },
+  {
+    path: '/eczaneadmin/:galleryId',
+    name: 'EczaneAdmin',
+    component: EczaneAdmin,    
   },    
 ]
 const router = createRouter({
