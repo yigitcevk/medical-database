@@ -10,7 +10,7 @@
             <div class = 'galleryEmailCards' style="border-style: solid;">
                 <div>
                     <label for="enter-email" style="margin-top: 5px; margin-right: 5px;">Gallery ID</label>
-                    <input class="email-input" style="border-style: solid; margin-top: 5px;" v-model="email" v-on:keyup.enter="login"  placeholder="Eczane Id giriş" />
+                    <input  class="email-input" style="border-style: solid; margin-top: 5px;" v-model="eczaneID" v-on:keyup.enter="login"  placeholder="Eczane Id giriş" />
                 </div>
 
                 <a class="button-login" v-on:click="login()">
@@ -36,7 +36,7 @@ export default {
   },
   data() {
     return {
-      email:""     
+      eczaneID:""     
     }
   },
   created() { 
@@ -46,9 +46,9 @@ export default {
       this.$router.push({
           name: 'EczaneAdmin',
           params: {
-            galleryId:this.email
+            eczaneID:this.eczaneID
           }
-      });       
+      });      
     },
   }
 }

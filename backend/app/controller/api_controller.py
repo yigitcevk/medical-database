@@ -13,17 +13,18 @@ logger = logging.getLogger(__name__)
 from . import conn
 
 
-@controller.route('/eczane', methods=['get'])
-def eczane():
+@controller.route('/eczaneadmin/<string:eczaneId>', methods=['get'])
+def eczane(eczaneId):
     cur = conn.cursor()
-    cur.execute('''select * from eczane;''')
+    cur.execute('''select * from eczane Where eczane_id=%s;''', (eczaneId))
     eczaneler = cur.fetchall()
     result = []
     result.append({'eczane_id':'0','eczane_ad':'','adres_id':'0'})
     for eczane in eczaneler:
         result.append({'eczane_id':eczane[0],'eczane_ad':eczane[1],'adres_id':eczane[2]})
     conn.commit()
-
+    print("sdadas")
+    print(result)
     return jsonify(result)
 
 
@@ -40,10 +41,10 @@ def personel():
 
     return jsonify(result)
 
-@controller.route('/adres', methods=['get'])
-def adres():
+@controller.route('/adres/<string:adresId>', methods=['get'])
+def adres(adresId):
     cur = conn.cursor()
-    cur.execute('''select * from adres;''')
+    cur.execute('''select * from adres where adres_id=%s;''',(adresId))
     adresler = cur.fetchall()
     result = []
     result.append({'adres_id':'0','il':'','ilce':'','posta_kodu':'0'})
@@ -53,10 +54,10 @@ def adres():
 
     return jsonify(result)
 
-@controller.route('/eczaci', methods=['get'])
-def eczaci():
+@controller.route('/eczaci/<string:eczaciId>', methods=['get'])
+def eczaci(eczaciId):
     cur = conn.cursor()
-    cur.execute('''select * from eczaci;''')
+    cur.execute('''select * from eczaci where eczane_id=%s;''',(eczaciId))
     eczacilar = cur.fetchall()
     result = []
     result.append({'eczaci_id':'0','eczaci_ad_soyad':'','eczane_id':'0'})

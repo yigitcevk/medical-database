@@ -23,7 +23,7 @@ const routes = [
     component: MusteriPage
   },
   {
-    path: '/eczaneadmin/:galleryId',
+    path: '/eczaneadmin/:eczaneID',
     name: 'EczaneAdmin',
     component: EczaneAdmin,    
   },    
