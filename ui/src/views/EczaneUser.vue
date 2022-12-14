@@ -1,0 +1,142 @@
+<template>
+    <div style='heigth : 100vh'>
+        <div style="myCars">
+            <h3>
+                Profile:
+            </h3>
+            <p>
+                Tc Kimlik Numarası: {{ tcNum }}
+            </p>
+            <p>
+                Hasta Isim ve Soyisim : {{ hasta_ad_soyad }}
+            </p>
+            <p>
+                Cinsiyet : {{ cinsiyet }}
+            </p>
+            <p>
+                Doğum Tarihi : {{ dog_tar }}
+            </p>
+            <p>
+                Adres : {{ adres }}
+            </p>
+            <p>
+                Telefon Numarası : {{ telefon }}
+            </p>
+        </div>
+        <div>
+            <table border="1">
+                <thead>
+                    <tr>
+                        <th>Reçete</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="item in ilaclar" :key="item.ilac_id">
+                        <td>{{ item.ilac_ad }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</template>
+
+<script>
+import router from '@/router';
+
+export default {
+    name: 'EczaneUser',
+    components: {
+    },
+    data() {
+        return {
+            tcNum: null,
+            ev_adres_id: null,
+            cinsiyet: "",
+            dog_tar: "",
+            hasta_ad_soyad: "",
+            ilac_id: "",
+            telefon: "",
+            adres: "",
+            eczaneId: "",
+            ilaclar:""
+        }
+    },
+    created() {
+        const pageInfo = this.$router.currentRoute.value;
+        this.tcNum = pageInfo.params.tcNum;
+        const url1 = 'http://127.0.0.1:5000/hasta/' + this.tcNum;
+        fetch(url1)
+            .then(async response => {
+                const data = await response.json();
+                if (!response.ok) {
+                    const error = (data && data.message) || response.statusText;
+                    return Promise.reject(error);
+                }
+                console.log(data)
+                this.hasta_ad_soyad = data[1].hasta_ad_soyad;
+                this.telefon = data[1].telefon;
+                this.adres = data[1].adres;
+                this.dog_tar = data[1].dog_tar;
+                this.cinsiyet = data[1].cinsiyet;
+                this.ev_adres_id = data[1].adres_id;
+                this.ilac_id = data[1].ilac_id;
+
+                const url2 = 'http://127.0.0.1:5000/adres/' + this.ev_adres_id;
+                console.log(url2);
+                fetch(url2)
+                    .then(async response => {
+                        const data = await response.json();
+                        if (!response.ok) {
+                            const error = (data && data.message) || response.statusText;
+                            return Promise.reject(error);
+                        }
+                        this.adres = data[1].il + " " + data[1].ilce + " " + data[1].posta_kodu;
+                    })
+                    .catch(error => {
+                        this.errorMessage = error;
+                        console.error("There was an error!", error);
+                    });
+
+                const url3 = 'http://127.0.0.1:5000/tekilac/' + this.ilac_id;
+                console.log(url3);
+                fetch(url3)
+                    .then(async response => {
+                        const data = await response.json();
+                        if (!response.ok) {
+                            const error = (data && data.message) || response.statusText;
+                            return Promise.reject(error);
+                        }
+                        console.log(data)
+                        this.eczaneId = data[1].eczane_id
+                        const url4 = 'http://127.0.0.1:5000/ilac/' + this.eczaneId;
+                        fetch(url4)
+                            .then(async response => {
+                                const data = await response.json();
+                                if (!response.ok) {
+                                    const error = (data && data.message) || response.statusText;
+                                    return Promise.reject(error);
+                                }
+                                this.ilaclar = data;
+                            })
+                            .catch(error => {
+                                this.errorMessage = error;
+                                console.error("There was an error!", error);
+                            });
+                    })
+                    .catch(error => {
+                        this.errorMessage = error;
+                        console.error("There was an error!", error);
+                    });
+            })
+            .catch(error => {
+                this.errorMessage = error;
+                console.error("There was an error!", error);
+            });
+    },
+    methods: {
+        resetPage() {
+            window.location.reload();
+        },
+    },
+}
+</script>

@@ -3,6 +3,7 @@ import Home from '../views/Home.vue'
 import EczanePage from '../views/EczanePage.vue'
 import MusteriPage from '../views/MusteriPage.vue'
 import EczaneAdmin from '../views/EczaneAdmin.vue'
+import EczaneUser from '../views/EczaneUser.vue'
 
 
 
@@ -26,6 +27,11 @@ const routes = [
     path: '/eczaneadmin/:eczaneID',
     name: 'EczaneAdmin',
     component: EczaneAdmin,    
+  }, 
+  {
+    path: '/eczaneuser/:tcNum',
+    name: 'EczaneUser',
+    component: EczaneUser,    
   },    
 ]
 const router = createRouter({

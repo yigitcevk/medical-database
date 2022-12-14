@@ -210,7 +210,7 @@ export default {
             }).catch(function (error) {
                 console.error(error);
             });
-            this.resetPage();
+            this.resetPage
         }
     },
 }
