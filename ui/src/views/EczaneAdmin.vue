@@ -17,6 +17,28 @@
               Eczaci Id  : {{eczaciId}}
           </p>
       </div>
+
+      <div>
+        <table border = "1">
+            <thead>
+            <tr>
+                <th>İlaç Adı</th>
+                <th>Alış Fiyatı</th>
+                <th>Satış Fiyatı</th>
+                <th>İlaç Sayısı</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr v-for="item in ilaclar" :key="item.ilac_id">
+                <td>{{item.ilac_ad}}</td>
+                <td>{{item.alis_fiyat}}</td>
+                <td>{{item.satis_fiyat}}</td>
+                <td>{{item.envanter}}</td>
+                <td>{{}}</td>
+            </tr>
+            </tbody>
+        </table>
+      </div>
     </div>
   </template>
 
@@ -32,7 +54,8 @@
                 eczaneAdresId:null,
                 eczaneAdres:"",
                 eczaciAdSoyad:"",
-                eczaciId:null
+                eczaciId:null,
+                ilaclar:[]
             }
         },
         created() {
@@ -86,6 +109,21 @@
                 this.errorMessage = error;
                 console.error("There was an error!", error);
             });
+            const url4 = 'http://127.0.0.1:5000/ilac/' + this.eczaneId;
+            fetch(url4)
+                .then(async response => {
+                    const data = await response.json();
+                    if (!response.ok) {
+                        const error = (data && data.message) || response.statusText;
+                        return Promise.reject(error);
+                    }
+                    this.ilaclar = data;
+                })
+                .catch(error => {
+                    this.errorMessage = error;
+                    console.error("There was an error!", error);
+                });
+            
         },
         methods: {
 
