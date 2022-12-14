@@ -16,7 +16,7 @@ logger = logging.getLogger(__name__)
 @controller.route('/eczaneadmin/<string:eczaneId>', methods=['get'])
 def eczane(eczaneId):
     cur = conn.cursor()
-    cur.execute('''select * from eczane Where eczane_id=%s;''', (eczaneId))
+    cur.execute('''select * from eczane Where eczane_id=%s;''', (eczaneId,))
     eczaneler = cur.fetchall()
     result = []
     result.append({'eczane_id': '0', 'eczane_ad': '', 'adres_id': '0'})
@@ -46,7 +46,7 @@ def personel():
 @controller.route('/adres/<string:adresId>', methods=['get'])
 def adres(adresId):
     cur = conn.cursor()
-    cur.execute('''select * from adres where adres_id=%s;''', (adresId))
+    cur.execute('''select * from adres where adres_id=%s;''', (adresId,))
     adresler = cur.fetchall()
     result = []
     result.append({'adres_id': '0', 'il': '', 'ilce': '', 'posta_kodu': '0'})
@@ -61,7 +61,7 @@ def adres(adresId):
 @controller.route('/eczaci/<string:eczaciId>', methods=['get'])
 def eczaci(eczaciId):
     cur = conn.cursor()
-    cur.execute('''select * from eczaci where eczane_id=%s;''', (eczaciId))
+    cur.execute('''select * from eczaci where eczane_id=%s;''', (eczaciId,))
     eczacilar = cur.fetchall()
     result = []
     result.append({'eczaci_id': '0', 'eczaci_ad_soyad': '', 'eczane_id': '0'})
@@ -77,10 +77,26 @@ def eczaci(eczaciId):
 def ilac(eczaneId):
     cur = conn.cursor()
     cur.execute(
-        '''select * from ilac where eczane_id=%s order by ilac_id asc;''', (eczaneId))
+        '''select * from ilac where eczane_id=%s order by ilac_id asc;''', (eczaneId,))
     ilaclar = cur.fetchall()
     result = []
-    # result.append({'ilac_id':'0','ilac_ad':'','alis_fiyat':'0','satis_fiyat':'0','envanter':'0','eczane_id':'0'})
+    result.append({'ilac_id':'0','ilac_ad':'','alis_fiyat':'0','satis_fiyat':'0','envanter':'0','eczane_id':'0'})
+    for ilac in ilaclar:
+        result.append({'ilac_id': ilac[0], 'ilac_ad': ilac[1], 'alis_fiyat': ilac[2],
+                      'satis_fiyat': ilac[3], 'envanter': ilac[4], 'eczane_id': ilac[5]})
+    conn.commit()
+
+    return jsonify(result)
+
+
+@controller.route('/tekilac/<string:ilacId>', methods=['get'])
+def tekilac(ilacId):
+    cur = conn.cursor()
+    cur.execute(
+        '''select * from ilac where ilac_id=%s;''', (ilacId,))
+    ilaclar = cur.fetchall()
+    result = []
+    result.append({'ilac_id':'0','ilac_ad':'','alis_fiyat':'0','satis_fiyat':'0','envanter':'0','eczane_id':'0'})
     for ilac in ilaclar:
         result.append({'ilac_id': ilac[0], 'ilac_ad': ilac[1], 'alis_fiyat': ilac[2],
                       'satis_fiyat': ilac[3], 'envanter': ilac[4], 'eczane_id': ilac[5]})
@@ -103,7 +119,7 @@ def removeMedicine():
         updateQuery = ''' update ilac
         set envanter = envanter - 1 
         where ilac_id = %s and ilac.eczane_id = %s'''
-        cur.execute(updateQuery, (ilacId, eczaneId))
+        cur.execute(updateQuery, (ilacId, eczaneId,))
         print(eczaneId)
         print(ilacId)
     except:
@@ -120,7 +136,7 @@ def addMedicine():
         data = request.json
         print(data)
         alis_fiyat = data['alis_fiyat']
-        eczane_id = data['eczane_id'] 
+        eczane_id = data['eczane_id']
         envanter = data['envanter']
         ilac_id = data['ilac_id']
         ilac_ad = data['ilac_ad']
@@ -130,20 +146,21 @@ def addMedicine():
     cur = conn.cursor()
 
     try:
-        addQuery=''' INSERT INTO ilac (ilac_id, ilac_ad, alis_fiyat, satis_fiyat, envanter, eczane_id)
+        addQuery = ''' INSERT INTO ilac (ilac_id, ilac_ad, alis_fiyat, satis_fiyat, envanter, eczane_id)
         VALUES (%s, %s, %s, %s, %s, %s);'''
-        cur.execute(addQuery,(ilac_id, ilac_ad, alis_fiyat, satis_fiyat, envanter, eczane_id))
+        cur.execute(addQuery, (ilac_id, ilac_ad, alis_fiyat,
+                    satis_fiyat, envanter, eczane_id,))
     except:
         return jsonify({"message": "bir hata olustu"})
-    #conn.commit()
+    conn.commit()
 
     return jsonify({"message": "basariyla silindi"})
 
 
-@controller.route('/hasta', methods=['get'])
-def hasta():
+@controller.route('/hasta/<string:tcNum>', methods=['get'])
+def hasta(tcNum):
     cur = conn.cursor()
-    cur.execute('''select * from hasta;''')
+    cur.execute('''select * from hasta where hasta_tckn=%s;''', (tcNum,))
     hastalar = cur.fetchall()
     result = []
     result.append({'hasta_tckn': '', 'hasta_ad_soyad': '', 'cinsiyet': '0',
