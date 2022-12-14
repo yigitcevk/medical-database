@@ -34,7 +34,9 @@
                 <td>{{item.alis_fiyat}}</td>
                 <td>{{item.satis_fiyat}}</td>
                 <td>{{item.envanter}}</td>
-                <td>{{}}</td>
+                <td><button class='button-black' @click="removeMedicine(item.ilac_id)">
+                    İlaç sayısını eksilt
+                </button></td>
             </tr>
             </tbody>
         </table>
@@ -126,7 +128,27 @@
             
         },
         methods: {
-
+            removeMedicine(ilac_id){
+                let data =JSON.stringify({"ilac_id":ilac_id,"eczane_id":this.eczaneId});    
+                const url5 = 'http://127.0.0.1:5000/removeMedicine'; 
+                fetch(url5, {
+                    method: 'post',
+                    headers: {
+                        'Content-Type' : 'application/json'
+                    },
+                body: data
+                }).then(function(response){
+                    console.log(response)
+                }).then(function(text){
+                    console.log(text);
+                }).catch(function (error){
+                    console.error(error);
+                });
+                this.resetPage();
+            },
+            resetPage() {
+                window.location.reload();
+            },
         },
     }
 </script>

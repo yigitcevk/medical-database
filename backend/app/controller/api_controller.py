@@ -70,7 +70,7 @@ def eczaci(eczaciId):
 @controller.route('/ilac/<string:eczaneId>', methods=['get'])
 def ilac(eczaneId):
     cur = conn.cursor()
-    cur.execute('''select * from ilac where eczane_id=%s;''',(eczaneId))
+    cur.execute('''select * from ilac where eczane_id=%s order by ilac_id asc;''',(eczaneId))
     ilaclar = cur.fetchall()
     result = []
     #result.append({'ilac_id':'0','ilac_ad':'','alis_fiyat':'0','satis_fiyat':'0','envanter':'0','eczane_id':'0'})
@@ -79,6 +79,30 @@ def ilac(eczaneId):
     conn.commit()
 
     return jsonify(result)
+
+@controller.route('/removeMedicine', methods=['post'])
+def removeMedicine():
+    if request.json is not None:
+        eczaneId = request.json['eczane_id']
+        ilacId = request.json['ilac_id']
+    else:
+        return 'car_id must be defined', 400
+
+
+    cur = conn.cursor()
+
+    try:
+        updateQuery = ''' update ilac
+        set envanter = envanter - 1 
+        where ilac_id = %s and ilac.eczane_id = %s'''
+        cur.execute(updateQuery, (ilacId, eczaneId))
+        print(eczaneId)
+        print(ilacId)
+    except:
+        return jsonify({"message":"bir hata olustu"})
+    conn.commit()
+
+    return jsonify({"message":"basariyla silindi"})
 
 @controller.route('/hasta', methods=['get'])
 def hasta():

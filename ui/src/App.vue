@@ -107,7 +107,7 @@ body {
 .button-black {
   cursor: pointer;
   float: right;
-  margin-left: 24px;
+  margin-left: 0px;
   /*width: 161px;*/
   /*height: 48px;*/
   padding: 16px 24px;
@@ -117,13 +117,13 @@ body {
   font-weight: bold;
   border: 2px solid #0d1821;
   box-sizing: border-box;
-  border-radius: 40px;
+  border-radius: 20px;
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
 }
 
 .button-black > .text {
   display: inline-block;
-  font-size: 16px;
+  font-size: 8px;
   vertical-align: middle;
 }
 
@@ -214,8 +214,7 @@ body {
   padding: 47px;
 }
 
-.logo {
-}
+/*.logo {}*/
 
 .button {
   display: flex;
