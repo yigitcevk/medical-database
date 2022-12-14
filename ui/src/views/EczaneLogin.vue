@@ -1,16 +1,16 @@
 <template>
     <div class="top-frame">
 
-        <img class="otogalerimicon"
+        <img class="eczaneicon"
             src="@/assets/iconlarge.png"
         />
 
         <div class="container" style="text-align: center; align-items: center">
 
-            <div class = 'galleryEmailCards' style="border-style: solid;">
+            <div class = 'EczaneIdCards' style="border-style: solid;">
                 <div>
-                    <label for="enter-email" style="margin-top: 5px; margin-right: 5px;">Eczane ID</label>
-                    <input  class="email-input" style="border-style: solid; margin-top: 5px;" v-model="eczaneID" v-on:keyup.enter="login"  placeholder="Eczane Id giriş" />
+                    <label for="enter-id" style="margin-top: 5px; margin-right: 5px;">Eczane ID</label>
+                    <input  class="id-input" style="border-style: solid; margin-top: 5px;" v-model="eczaneID" v-on:keyup.enter="login"  placeholder="Eczane Id giriş" />
                 </div>
 
                 <a class="button-login" v-on:click="login()">
@@ -56,11 +56,11 @@ export default {
 
 
 <style>
-.email-input {
+.id-input {
     width:250px;
     border-radius: 8px;
 }
-.otogalerimicon {
+.eczaneicon {
     width: 15%;
     position: absolute;
     left: 0;
@@ -119,7 +119,7 @@ export default {
   font-size: 8px;
   vertical-align: middle;
 }
-.galleryEmailCards{
+.EczaneIdCards{
   display: flex;
   flex-direction: column;
   text-align:center;
