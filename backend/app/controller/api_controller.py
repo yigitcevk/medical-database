@@ -67,13 +67,13 @@ def eczaci(eczaciId):
 
     return jsonify(result)
 
-@controller.route('/ilac', methods=['get'])
-def ilac():
+@controller.route('/ilac/<string:eczaneId>', methods=['get'])
+def ilac(eczaneId):
     cur = conn.cursor()
-    cur.execute('''select * from ilac;''')
+    cur.execute('''select * from ilac where eczane_id=%s;''',(eczaneId))
     ilaclar = cur.fetchall()
     result = []
-    result.append({'ilac_id':'0','ilac_ad':'','alis_fiyat':'0','satis_fiyat':'0','envanter':'0','eczane_id':'0'})
+    #result.append({'ilac_id':'0','ilac_ad':'','alis_fiyat':'0','satis_fiyat':'0','envanter':'0','eczane_id':'0'})
     for ilac in ilaclar:
         result.append({'ilac_id':ilac[0],'ilac_ad':ilac[1],'alis_fiyat':ilac[2],'satis_fiyat':ilac[3],'envanter':ilac[4],'eczane_id':ilac[5]})
     conn.commit()
