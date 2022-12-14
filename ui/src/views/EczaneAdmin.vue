@@ -95,11 +95,11 @@ export default {
             eczaciAdSoyad: "",
             eczaciId: null,
             ilaclar: [],
-            ilac_id:null,
-            ilac_ad:"",
-            alis_fiyat:"",
-            satis_fiyat:"",
-            envanter:""
+            ilac_id: null,
+            ilac_ad: "",
+            alis_fiyat: "",
+            satis_fiyat: "",
+            envanter: ""
         }
     },
     created() {
@@ -191,6 +191,27 @@ export default {
         resetPage() {
             window.location.reload();
         },
+        addMedicine() {
+            let data = JSON.stringify({ "alis_fiyat": this.alis_fiyat, "eczane_id": this.eczaneId, "envanter": this.envanter, "ilac_ad": this.ilac_ad, "ilac_id": this.ilac_id, "satis_fiyat": this.satis_fiyat });
+
+            const url20 = 'http://127.0.0.1:5000/addMedicine';
+            console.log(url20)
+            fetch(url20, {
+                method: 'post',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'mode': 'no-cors'
+                },
+                body: data
+            }).then(function (response) {
+                console.log(response)
+            }).then(function (text) {
+                console.log(text);
+            }).catch(function (error) {
+                console.error(error);
+            });
+            this.resetPage();
+        }
     },
 }
 </script>

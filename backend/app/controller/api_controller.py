@@ -24,8 +24,6 @@ def eczane(eczaneId):
         result.append(
             {'eczane_id': eczane[0], 'eczane_ad': eczane[1], 'adres_id': eczane[2]})
     conn.commit()
-    print("sdadas")
-    print(result)
     return jsonify(result)
 
 
@@ -117,30 +115,27 @@ def removeMedicine():
 
 @controller.route('/addMedicine', methods=['post'])
 def addMedicine():
+    print("addMEd içi")
     if request.json is not None:
         data = request.json
         print(data)
-        alis_fiyat = data.alis_fiyat
-        eczane_id = data.eczane_id 
-        envanter = data.envanter
-        ilac_id = data.ilac_id
-        ilac_ad = data.ilac_ad
-        satis_fiyat = data.satis_fiyat
+        alis_fiyat = data['alis_fiyat']
+        eczane_id = data['eczane_id'] 
+        envanter = data['envanter']
+        ilac_id = data['ilac_id']
+        ilac_ad = data['ilac_ad']
+        satis_fiyat = data['satis_fiyat']
     else:
         return 'car_id must be defined', 400
-    return
     cur = conn.cursor()
 
     try:
-        updateQuery = ''' update ilac
-        set envanter = envanter - 1 
-        where ilac_id = %s and ilac.eczane_id = %s'''
-        cur.execute(updateQuery, (ilacId, eczaneId))
-        print(eczaneId)
-        print(ilacId)
+        addQuery=''' INSERT INTO ilac (ilac_id, ilac_ad, alis_fiyat, satis_fiyat, envanter, eczane_id)
+        VALUES (%s, %s, %s, %s, %s, %s);'''
+        cur.execute(addQuery,(ilac_id, ilac_ad, alis_fiyat, satis_fiyat, envanter, eczane_id))
     except:
         return jsonify({"message": "bir hata olustu"})
-    conn.commit()
+    #conn.commit()
 
     return jsonify({"message": "basariyla silindi"})
 
