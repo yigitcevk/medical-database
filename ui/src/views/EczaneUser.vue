@@ -135,7 +135,7 @@ export default {
     },
     methods: {
         resetPage() {
-            window.location.reload();
+            setTimeout(function(){window.location.reload()}, 50000000);
         },
     },
 }

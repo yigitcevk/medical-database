@@ -189,7 +189,7 @@ export default {
             this.resetPage();
         },
         resetPage() {
-            window.location.reload();
+            setTimeout(function(){window.location.reload()}, 1000);
         },
         addMedicine() {
             let data = JSON.stringify({ "alis_fiyat": this.alis_fiyat, "eczane_id": this.eczaneId, "envanter": this.envanter, "ilac_ad": this.ilac_ad, "ilac_id": this.ilac_id, "satis_fiyat": this.satis_fiyat });
