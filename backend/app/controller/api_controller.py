@@ -27,17 +27,19 @@ def eczane(eczaneId):
     return jsonify(result)
 
 
-@controller.route('/personel', methods=['get'])
+@controller.route('/personel/<string:eczaneId>', methods=['get'])
 def personel():
     cur = conn.cursor()
-    cur.execute('''select * from personel;''')
+    cur.execute('''select *
+    from personel, eczane
+    where eczane.eczane_id = %s and eczane.eczane_id=personel.eczane_id;''')
     personeller = cur.fetchall()
     result = []
     result.append({'per_tckn': '', 'per_ad_soyad': '',
-                  'per_tel_no': '', 'eczane_id': '0', 'adres_id': '0'})
+                  'per_tel_no': '', 'eczane_id': '0', 'adres_id': '0', 'eczane_id': '0','adres_ad': '0', 'adres_id': '0'})
     for personel in personeller:
         result.append({'per_tckn': personel[0], 'per_ad_soyad': personel[1],
-                      'per_tel_no': personel[2], 'eczane_id': personel[3], 'adres_id': personel[4]})
+                  'per_tel_no': personel[2], 'eczane_id': personel[3], 'adres_id': personel[4], 'eczane_id': personel[5],'adres_ad': personel[6], 'adres_id': personel[7]})
     conn.commit()
 
     return jsonify(result)

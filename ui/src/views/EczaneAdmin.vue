@@ -19,7 +19,7 @@
         </div>
 
         <div>
-            <table border="1">
+            <table border="1" style="background-color: #656569;">
                 <thead>
                     <tr>
                         <th>İlaç Adı</th>
@@ -40,6 +40,7 @@
                     </tr>
                 </tbody>
             </table>
+             
             <div>
                 <button @click="$router.go(-1)">back</button>
             </div>
@@ -99,7 +100,11 @@ export default {
             ilac_ad: "",
             alis_fiyat: "",
             satis_fiyat: "",
-            envanter: ""
+            envanter: "",
+            personelAdSoyad: "",
+            pertckn: "",
+            personeller:[]
+
         }
     },
     created() {
@@ -143,6 +148,22 @@ export default {
                         }
                         this.eczaciAdSoyad = data[1].eczaci_ad_soyad
                         this.eczaciId = data[1].eczaci_id
+                    })
+                    .catch(error => {
+                        this.errorMessage = error;
+                        console.error("There was an error!", error);
+                    });
+                const url9 = 'http://127.0.0.1:5000/personel/' + this.eczaneId;
+                fetch(url9)
+                    .then(async response => {
+                        const data = await response.json();
+                        if (!response.ok) {
+                            const error = (data && data.message) || response.statusText;
+                            return Promise.reject(error);
+                        }
+                        this.personeller=data;
+                        //this.personelAdSoyad = data[1].personel_ad_soyad
+                        //this.pertckn = data[1].per_tckn
                     })
                     .catch(error => {
                         this.errorMessage = error;

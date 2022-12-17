@@ -28,7 +28,7 @@
             </p>
         </div>
         <div>
-            <table border="1">
+            <table border="1" style="background-color: #656569;">
                 <thead>
                     <tr>
                         <th>Reçete</th>

@@ -46,7 +46,7 @@ export default {
 
 body {
   font-family: "Public Sans";
-  background-color:#f08921;
+  background-color:#bbe3ec;
 }
 
 .button-white {
@@ -172,14 +172,14 @@ body {
 
 .top-frame {
   padding: 16px;
-  background: #f08921;
+  background: #bbe3ec;
   padding-bottom: 20px;
   border-bottom: 0px solid black;
 }
 
 .home-frame {
   padding: 16px;
-  background: #f08921;
+  background: #bbe3ec;
   text-align: center;
   
 }

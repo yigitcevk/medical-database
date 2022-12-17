@@ -11,9 +11,6 @@
       <a class="button-add" v-on:click="navigateMusteri()">
           Musteri girişi
       </a>
-      <div class="lower-page-div">
-        <h1>Thanks for working with us!</h1>
-      </div>
       <img class="tobb-etu-png" src="@/assets/tobbetu.png"/>   
 
     
