@@ -49,25 +49,25 @@
                         <div>
                             <label for="enter-email" style="margin-top: 5px; margin-right: 5px;">İlaç ID</label>
                             <input style="border-style: solid; margin-top: 5px;" v-model="ilac_id"
-                                v-on:keyup.enter="login" placeholder="Eczane Id giriş" />
+                                v-on:keyup.enter="login" placeholder="İlaç Id giriş" />
 
                             <label for="enter-email" style="margin-top: 5px; margin-right: 5px;">İlaç Adı</label>
                             <input style="border-style: solid; margin-top: 5px;" v-model="ilac_ad"
-                                v-on:keyup.enter="login" placeholder="Eczane Id giriş" />
+                                v-on:keyup.enter="login" placeholder="İlaç adı giriş" />
                         </div>
 
                         <div>
                             <label for="enter-email" style="margin-top: 5px; margin-right: 5px;">Alış Fiyatı</label>
                             <input style="border-style: solid; margin-top: 5px;" v-model="alis_fiyat"
-                                v-on:keyup.enter="login" placeholder="Eczane Id giriş" />
+                                v-on:keyup.enter="login" placeholder="Alış fiyatı giriş" />
                             <label for="enter-email" style="margin-top: 5px; margin-right: 5px;">Satış Fiyatı</label>
                             <input style="border-style: solid; margin-top: 5px;" v-model="satis_fiyat"
-                                v-on:keyup.enter="login" placeholder="Eczane Id giriş" />
+                                v-on:keyup.enter="login" placeholder="Satış fiyatı giriş" />
                         </div>
                         <div>
                             <label for="enter-email" style="margin-top: 5px; margin-right: 5px;">Envanter</label>
                             <input style="border-style: solid; margin-top: 5px;" v-model="envanter"
-                                v-on:keyup.enter="login" placeholder="Eczane Id giriş" />
+                                v-on:keyup.enter="login" placeholder="Miktar giriş" />
                         </div>
                     </div>
 

@@ -22,6 +22,10 @@
             <p>
                 Telefon Numarası : {{ telefon }}
             </p>
+            <p>
+                Bulunan Eczane : {{ eczane_ad }}
+               {{ il }}
+            </p>
         </div>
         <div>
             <table border="1">
@@ -58,7 +62,9 @@ export default {
             telefon: "",
             adres: "",
             eczaneId: "",
-            ilaclar:""
+            ilaclar:"",
+            eczane_ad:"",
+            il:""
         }
     },
     created() {
@@ -91,6 +97,22 @@ export default {
                             return Promise.reject(error);
                         }
                         this.adres = data[1].il + " " + data[1].ilce + " " + data[1].posta_kodu;
+                    })
+                    .catch(error => {
+                        this.errorMessage = error;
+                        console.error("There was an error!", error);
+                    });
+                const url7 = 'http://127.0.0.1:5000/hasta_eczane/' + this.tcNum;
+                console.log(url7);
+                fetch(url7)
+                    .then(async response => {
+                        const data = await response.json();
+                        if (!response.ok) {
+                            const error = (data && data.message) || response.statusText;
+                            return Promise.reject(error);
+                        }
+                        this.eczane_ad = data[1].eczane_ad;
+                        this.il=data[1].il;
                     })
                     .catch(error => {
                         this.errorMessage = error;

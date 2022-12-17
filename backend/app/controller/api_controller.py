@@ -171,3 +171,16 @@ def hasta(tcNum):
     conn.commit()
 
     return jsonify(result)
+
+@controller.route('/hasta_eczane/<string:tcNum>', methods=['get'])
+def hasta_eczane(tcNum):
+    cur = conn.cursor()
+    cur.execute('''select eczane_ad, adres.il from hasta, ilac, eczane, adres where hasta.hasta_tckn = %s and hasta.ilac_id = ilac.ilac_id and eczane.eczane_id = ilac.eczane_id and eczane.adres_id=adres.adres_id ;''', (tcNum,))
+    hastalar_eczane = cur.fetchall()
+    result = []
+    result.append({'eczane_ad': '', 'il': ''})
+    for hasta_eczane in hastalar_eczane:
+        result.append({'eczane_ad': hasta_eczane[0], 'il': hasta_eczane[1]})
+    conn.commit()
+
+    return jsonify(result)
