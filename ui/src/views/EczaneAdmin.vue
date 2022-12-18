@@ -1,5 +1,5 @@
 <template>
-    <div style='heigth : 100vh'>
+    <div style=' heigth : 100vh'>
         <div style="myCars">
             <h3>
                 Profile:
@@ -54,6 +54,9 @@
                         <td>{{ item.per_tckn }}</td>
                         <td>{{ item.per_ad_soyad }}</td>
                         <td>{{ item.per_tel_no }}</td>
+                        <td><button class='button-black' @click="removePer(item.per_tckn)">
+                                İşten çıkar
+                            </button></td>
                     </tr>
                 </tbody>
             </table>
@@ -229,6 +232,31 @@ export default {
         },
         resetPage() {
             setTimeout(function(){window.location.reload()}, 1000);
+
+        
+        },
+        removePer(pertckn) {
+            let data = JSON.stringify({ "per_tckn": pertckn, "eczane_id": this.eczaneId });
+            const url10 = 'http://127.0.0.1:5000/removePer';
+            fetch(url10, {
+                method: 'post',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: data
+            }).then(function (response) {
+                console.log(response)
+            }).then(function (text) {
+                console.log(text);
+            }).catch(function (error) {
+                console.error(error);
+            });
+            this.resetPage();
+        },
+        resetPage() {
+            setTimeout(function(){window.location.reload()}, 1000);
+
+        
         },
         addMedicine() {
             let data = JSON.stringify({ "alis_fiyat": this.alis_fiyat, "eczane_id": this.eczaneId, "envanter": this.envanter, "ilac_ad": this.ilac_ad, "ilac_id": this.ilac_id, "satis_fiyat": this.satis_fiyat });

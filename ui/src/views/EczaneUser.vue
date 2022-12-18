@@ -26,12 +26,17 @@
                 Bulunan Eczane : {{ eczane_ad }}
                {{ il }}
             </p>
+            <p>
+                Hastanın ilacı ve fiyatı: {{ tekilac }} {{ilacfiyati}} tl
+               
+            </p>
         </div>
         <div>
+            
             <table border="1" style="background-color: #656569;">
                 <thead>
                     <tr>
-                        <th>Reçete</th>
+                        <th>Eczanede bulunan ilaçlar</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -64,7 +69,9 @@ export default {
             eczaneId: "",
             ilaclar:"",
             eczane_ad:"",
-            il:""
+            il:"",
+            tekilac: "",
+            ilacfiyati: ""
         }
     },
     created() {
@@ -128,6 +135,9 @@ export default {
                             const error = (data && data.message) || response.statusText;
                             return Promise.reject(error);
                         }
+                        this.tekilac=data[1].ilac_ad;
+                        this.ilacfiyati=data[1].satis_fiyat;
+                        
                         console.log(data)
                         this.eczaneId = data[1].eczane_id
                         const url4 = 'http://127.0.0.1:5000/ilac/' + this.eczaneId;

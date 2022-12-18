@@ -129,6 +129,24 @@ def removeMedicine():
 
     return jsonify({"message": "basariyla silindi"})
 
+@controller.route('/removePer', methods=['post'])
+def removePer():
+    if request.json is not None:
+        pertckn = request.json['per_tckn']
+    else:
+        return 'car_id must be defined', 400
+
+    cur = conn.cursor()
+
+    try:
+        cur.execute(''' DELETE FROM personel WHERE per_tckn=%s;''',(pertckn,))
+        
+    except:
+        return jsonify({"message": "bir hata olustu"})
+    conn.commit()
+
+    return jsonify({"message": "basariyla silindi"})
+
 
 @controller.route('/addMedicine', methods=['post'])
 def addMedicine():
