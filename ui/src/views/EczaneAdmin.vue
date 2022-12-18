@@ -40,6 +40,24 @@
                     </tr>
                 </tbody>
             </table>
+
+            <table border="1" style="background-color: #656569;">
+                <thead>
+                    <tr>
+                        <th>Per tcno</th>
+                        <th>Personel isim</th>
+                        <th>Personel tel no</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="item in personeller" :key="item.ilac_id">
+                        <td>{{ item.per_tckn }}</td>
+                        <td>{{ item.per_ad_soyad }}</td>
+                        <td>{{ item.per_tel_no }}</td>
+                    </tr>
+                </tbody>
+            </table>
+            
              
             <div>
                 <button @click="$router.go(-1)">back</button>
@@ -103,7 +121,7 @@ export default {
             envanter: "",
             personelAdSoyad: "",
             pertckn: "",
-            personeller:[]
+            personeller: []
 
         }
     },

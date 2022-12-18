@@ -28,11 +28,9 @@ def eczane(eczaneId):
 
 
 @controller.route('/personel/<string:eczaneId>', methods=['get'])
-def personel():
+def personel(eczaneId):
     cur = conn.cursor()
-    cur.execute('''select *
-    from personel, eczane
-    where eczane.eczane_id = %s and eczane.eczane_id=personel.eczane_id;''')
+    cur.execute('''select * from personel, eczane where eczane.eczane_id = %s and eczane.eczane_id=personel.eczane_id;''', (eczaneId,))
     personeller = cur.fetchall()
     result = []
     result.append({'per_tckn': '', 'per_ad_soyad': '',
@@ -122,6 +120,7 @@ def removeMedicine():
         set envanter = envanter - 1 
         where ilac_id = %s and ilac.eczane_id = %s'''
         cur.execute(updateQuery, (ilacId, eczaneId,))
+        
         print(eczaneId)
         print(ilacId)
     except:
@@ -144,7 +143,7 @@ def addMedicine():
         ilac_ad = data['ilac_ad']
         satis_fiyat = data['satis_fiyat']
     else:
-        return 'car_id must be defined', 400
+        return 'id must be defined', 400
     cur = conn.cursor()
 
     try:
@@ -157,6 +156,7 @@ def addMedicine():
     conn.commit()
 
     return jsonify({"message": "basariyla silindi"})
+
 
 
 @controller.route('/hasta/<string:tcNum>', methods=['get'])
@@ -177,7 +177,9 @@ def hasta(tcNum):
 @controller.route('/hasta_eczane/<string:tcNum>', methods=['get'])
 def hasta_eczane(tcNum):
     cur = conn.cursor()
-    cur.execute('''select eczane_ad, adres.il from hasta, ilac, eczane, adres where hasta.hasta_tckn = %s and hasta.ilac_id = ilac.ilac_id and eczane.eczane_id = ilac.eczane_id and eczane.adres_id=adres.adres_id ;''', (tcNum,))
+    cur.execute('''select eczane_ad, adres.il from hasta, ilac, eczane, adres where hasta.hasta_tckn = %s 
+    and hasta.ilac_id = ilac.ilac_id and eczane.eczane_id = ilac.eczane_id 
+    and eczane.adres_id=adres.adres_id ;''', (tcNum,))
     hastalar_eczane = cur.fetchall()
     result = []
     result.append({'eczane_ad': '', 'il': ''})
