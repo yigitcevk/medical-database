@@ -110,19 +110,28 @@ def removeMedicine():
     if request.json is not None:
         eczaneId = request.json['eczane_id']
         ilacId = request.json['ilac_id']
+        ilac=tekilac(ilacId)
+        if ilac.json is not None:
+            print(ilac.json[1])
+            envanter = ilac.json[1]['envanter']
+        else:
+            return 'ilac_id must be defined', 400
     else:
-        return 'car_id must be defined', 400
+        return 'eczane_id must be defined', 400
 
     cur = conn.cursor()
 
     try:
-        updateQuery = ''' update ilac
-        set envanter = envanter - 1 
-        where ilac_id = %s and ilac.eczane_id = %s'''
-        cur.execute(updateQuery, (ilacId, eczaneId,))
-        
-        print(eczaneId)
-        print(ilacId)
+        print(envanter)
+        if(envanter-1 <= 0 ):
+            deleteQuery='''DELETE FROM ilac WHERE ilac_id=%s; '''
+            cur.execute(deleteQuery,(ilacId,))
+
+        else:
+            updateQuery = ''' update ilac
+            set envanter = envanter - 1 
+            where ilac_id = %s and ilac.eczane_id = %s'''
+            cur.execute(updateQuery, (ilacId, eczaneId,))
     except:
         return jsonify({"message": "bir hata olustu"})
     conn.commit()
