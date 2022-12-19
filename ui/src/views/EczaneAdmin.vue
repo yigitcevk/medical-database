@@ -39,9 +39,6 @@
                             </button></td>
                     </tr>
                 </tbody>
-            </table>
-
-            <table border="1" style="background-color: #656569;">
                 <thead>
                     <tr>
                         <th>Per tcno</th>
@@ -59,12 +56,9 @@
                             </button></td>
                     </tr>
                 </tbody>
+                <button class='button-black' @click="$router.go(-1)">Geri Dön</button>
             </table>
-            
-             
-            <div>
-                <button @click="$router.go(-1)">back</button>
-            </div>
+
             <div class="container" style="text-align: left; align-items: left">
                 <div class='addMedicineCard' style="border-style: solid;">
                     <div>
@@ -182,7 +176,13 @@ export default {
                             const error = (data && data.message) || response.statusText;
                             return Promise.reject(error);
                         }
-                        this.personeller=data;
+                        data.forEach(element => {
+                            console.log(element)
+                            if (element['eczane_id'] != 0) {
+                                this.personeller.push(element)
+                            }
+                        });
+                        //this.personeller=data;
                         //this.personelAdSoyad = data[1].personel_ad_soyad
                         //this.pertckn = data[1].per_tckn
                     })
@@ -203,7 +203,12 @@ export default {
                     const error = (data && data.message) || response.statusText;
                     return Promise.reject(error);
                 }
-                this.ilaclar = data;
+                data.forEach(element => {
+                    if (element['ilac_id'] != 0) {
+                        this.ilaclar.push(element)
+                    }
+                    console.log(element)
+                });
             })
             .catch(error => {
                 this.errorMessage = error;
@@ -231,9 +236,7 @@ export default {
             this.resetPage();
         },
         resetPage() {
-            setTimeout(function(){window.location.reload()}, 1000);
-
-        
+            setTimeout(function () { window.location.reload() }, 500);
         },
         removePer(pertckn) {
             let data = JSON.stringify({ "per_tckn": pertckn, "eczane_id": this.eczaneId });
@@ -252,11 +255,6 @@ export default {
                 console.error(error);
             });
             this.resetPage();
-        },
-        resetPage() {
-            setTimeout(function(){window.location.reload()}, 1000);
-
-        
         },
         addMedicine() {
             let data = JSON.stringify({ "alis_fiyat": this.alis_fiyat, "eczane_id": this.eczaneId, "envanter": this.envanter, "ilac_ad": this.ilac_ad, "ilac_id": this.ilac_id, "satis_fiyat": this.satis_fiyat });

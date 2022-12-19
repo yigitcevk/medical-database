@@ -24,15 +24,15 @@
             </p>
             <p>
                 Bulunan Eczane : {{ eczane_ad }}
-               {{ il }}
+                {{ il }}
             </p>
             <p>
-                Hastanın ilacı ve fiyatı: {{ tekilac }} {{ilacfiyati}} tl
-               
+                Hastanın ilacı ve fiyatı: {{ tekilac }} {{ ilacfiyati }} tl
+
             </p>
         </div>
         <div>
-            
+
             <table border="1" style="background-color: #656569;">
                 <thead>
                     <tr>
@@ -42,8 +42,12 @@
                 <tbody>
                     <tr v-for="item in ilaclar" :key="item.ilac_id">
                         <td>{{ item.ilac_ad }}</td>
+                        <td><button class='button-black' @click="makeActive(item.ilac_id)">
+                                Aktif ilaç olarak seç
+                            </button></td>
                     </tr>
                 </tbody>
+                <button class='button-black' @click="$router.go(-1)">Geri Dön</button>
             </table>
         </div>
     </div>
@@ -67,9 +71,9 @@ export default {
             telefon: "",
             adres: "",
             eczaneId: "",
-            ilaclar:"",
-            eczane_ad:"",
-            il:"",
+            ilaclar: [],
+            eczane_ad: "",
+            il: "",
             tekilac: "",
             ilacfiyati: ""
         }
@@ -119,7 +123,7 @@ export default {
                             return Promise.reject(error);
                         }
                         this.eczane_ad = data[1].eczane_ad;
-                        this.il=data[1].il;
+                        this.il = data[1].il;
                     })
                     .catch(error => {
                         this.errorMessage = error;
@@ -135,9 +139,9 @@ export default {
                             const error = (data && data.message) || response.statusText;
                             return Promise.reject(error);
                         }
-                        this.tekilac=data[1].ilac_ad;
-                        this.ilacfiyati=data[1].satis_fiyat;
-                        
+                        this.tekilac = data[1].ilac_ad;
+                        this.ilacfiyati = data[1].satis_fiyat;
+
                         console.log(data)
                         this.eczaneId = data[1].eczane_id
                         const url4 = 'http://127.0.0.1:5000/ilac/' + this.eczaneId;
@@ -148,7 +152,12 @@ export default {
                                     const error = (data && data.message) || response.statusText;
                                     return Promise.reject(error);
                                 }
-                                this.ilaclar = data;
+                                data.forEach(element => {
+                                    if (element['ilac_id'] != 0) {
+                                        this.ilaclar.push(element)
+                                    }
+                                    console.log(element)
+                                });
                             })
                             .catch(error => {
                                 this.errorMessage = error;
@@ -166,8 +175,26 @@ export default {
             });
     },
     methods: {
+        makeActive(ilac_id){
+            let data = JSON.stringify({ "tcNum": this.tcNum, "ilac_id": ilac_id });
+            const url5 = 'http://127.0.0.1:5000/makeActive';
+            fetch(url5, {
+                method: 'post',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: data
+            }).then(function (response) {
+                console.log(response)
+            }).then(function (text) {
+                console.log(text);
+            }).catch(function (error) {
+                console.error(error);
+            });
+            this.resetPage()
+        },
         resetPage() {
-            setTimeout(function(){window.location.reload()}, 50000000);
+            setTimeout(function () { window.location.reload() }, 500);
         },
     },
 }

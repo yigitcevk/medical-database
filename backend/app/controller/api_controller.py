@@ -30,14 +30,15 @@ def eczane(eczaneId):
 @controller.route('/personel/<string:eczaneId>', methods=['get'])
 def personel(eczaneId):
     cur = conn.cursor()
-    cur.execute('''select * from personel, eczane where eczane.eczane_id = %s and eczane.eczane_id=personel.eczane_id;''', (eczaneId,))
+    cur.execute(
+        '''select * from personel, eczane where eczane.eczane_id = %s and eczane.eczane_id=personel.eczane_id;''', (eczaneId,))
     personeller = cur.fetchall()
     result = []
     result.append({'per_tckn': '', 'per_ad_soyad': '',
-                  'per_tel_no': '', 'eczane_id': '0', 'adres_id': '0', 'eczane_id': '0','adres_ad': '0', 'adres_id': '0'})
+                  'per_tel_no': '', 'eczane_id': '0', 'adres_id': '0', 'eczane_id': '0', 'adres_ad': '0', 'adres_id': '0'})
     for personel in personeller:
         result.append({'per_tckn': personel[0], 'per_ad_soyad': personel[1],
-                  'per_tel_no': personel[2], 'eczane_id': personel[3], 'adres_id': personel[4], 'eczane_id': personel[5],'adres_ad': personel[6], 'adres_id': personel[7]})
+                       'per_tel_no': personel[2], 'eczane_id': personel[3], 'adres_id': personel[4], 'eczane_id': personel[5], 'adres_ad': personel[6], 'adres_id': personel[7]})
     conn.commit()
 
     return jsonify(result)
@@ -80,7 +81,8 @@ def ilac(eczaneId):
         '''select * from ilac where eczane_id=%s order by ilac_id asc;''', (eczaneId,))
     ilaclar = cur.fetchall()
     result = []
-    result.append({'ilac_id':'0','ilac_ad':'','alis_fiyat':'0','satis_fiyat':'0','envanter':'0','eczane_id':'0'})
+    result.append({'ilac_id': '0', 'ilac_ad': '', 'alis_fiyat': '0',
+                  'satis_fiyat': '0', 'envanter': '0', 'eczane_id': '0'})
     for ilac in ilaclar:
         result.append({'ilac_id': ilac[0], 'ilac_ad': ilac[1], 'alis_fiyat': ilac[2],
                       'satis_fiyat': ilac[3], 'envanter': ilac[4], 'eczane_id': ilac[5]})
@@ -96,7 +98,8 @@ def tekilac(ilacId):
         '''select * from ilac where ilac_id=%s;''', (ilacId,))
     ilaclar = cur.fetchall()
     result = []
-    result.append({'ilac_id':'0','ilac_ad':'','alis_fiyat':'0','satis_fiyat':'0','envanter':'0','eczane_id':'0'})
+    result.append({'ilac_id': '0', 'ilac_ad': '', 'alis_fiyat': '0',
+                  'satis_fiyat': '0', 'envanter': '0', 'eczane_id': '0'})
     for ilac in ilaclar:
         result.append({'ilac_id': ilac[0], 'ilac_ad': ilac[1], 'alis_fiyat': ilac[2],
                       'satis_fiyat': ilac[3], 'envanter': ilac[4], 'eczane_id': ilac[5]})
@@ -110,7 +113,7 @@ def removeMedicine():
     if request.json is not None:
         eczaneId = request.json['eczane_id']
         ilacId = request.json['ilac_id']
-        ilac=tekilac(ilacId)
+        ilac = tekilac(ilacId)
         if ilac.json is not None:
             print(ilac.json[1])
             envanter = ilac.json[1]['envanter']
@@ -123,9 +126,9 @@ def removeMedicine():
 
     try:
         print(envanter)
-        if(envanter-1 <= 0 ):
-            deleteQuery='''DELETE FROM ilac WHERE ilac_id=%s; '''
-            cur.execute(deleteQuery,(ilacId,))
+        if (envanter-1 <= 0):
+            deleteQuery = '''DELETE FROM ilac WHERE ilac_id=%s; '''
+            cur.execute(deleteQuery, (ilacId,))
 
         else:
             updateQuery = ''' update ilac
@@ -138,6 +141,7 @@ def removeMedicine():
 
     return jsonify({"message": "basariyla silindi"})
 
+
 @controller.route('/removePer', methods=['post'])
 def removePer():
     if request.json is not None:
@@ -148,8 +152,8 @@ def removePer():
     cur = conn.cursor()
 
     try:
-        cur.execute(''' DELETE FROM personel WHERE per_tckn=%s;''',(pertckn,))
-        
+        cur.execute(''' DELETE FROM personel WHERE per_tckn=%s;''', (pertckn,))
+
     except:
         return jsonify({"message": "bir hata olustu"})
     conn.commit()
@@ -185,7 +189,6 @@ def addMedicine():
     return jsonify({"message": "basariyla silindi"})
 
 
-
 @controller.route('/hasta/<string:tcNum>', methods=['get'])
 def hasta(tcNum):
     cur = conn.cursor()
@@ -201,6 +204,7 @@ def hasta(tcNum):
 
     return jsonify(result)
 
+
 @controller.route('/hasta_eczane/<string:tcNum>', methods=['get'])
 def hasta_eczane(tcNum):
     cur = conn.cursor()
@@ -213,5 +217,25 @@ def hasta_eczane(tcNum):
     for hasta_eczane in hastalar_eczane:
         result.append({'eczane_ad': hasta_eczane[0], 'il': hasta_eczane[1]})
     conn.commit()
+
+    return jsonify(result)
+
+
+@controller.route('/makeActive', methods=['post'])
+def makeActive():
+    if request.json is not None:
+        tcNum = request.json['tcNum']
+        ilac_id = request.json['ilac_id']
+    else:
+        return 'id must be defined', 400
+    result = []
+    cur = conn.cursor()
+    try:
+        updateQuery = ''' update hasta
+            set ilac_id = %s 
+            where hasta_tckn = %s'''
+        cur.execute(updateQuery, (ilac_id, tcNum,))
+    except:
+        return jsonify({"message": "bir hata olustu"})
 
     return jsonify(result)
