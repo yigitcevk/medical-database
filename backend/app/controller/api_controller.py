@@ -84,7 +84,8 @@ def ilac(eczaneId):
     result.append({'ilac_id': '0', 'ilac_ad': '', 'alis_fiyat': '0',
                   'satis_fiyat': '0', 'envanter': '0', 'eczane_id': '0'})
     for ilac in ilaclar:
-        result.append({'ilac_id': ilac[0], 'ilac_ad': ilac[1], 'alis_fiyat': ilac[2],
+        if int(ilac[4] > 0):
+            result.append({'ilac_id': ilac[0], 'ilac_ad': ilac[1], 'alis_fiyat': ilac[2],
                       'satis_fiyat': ilac[3], 'envanter': ilac[4], 'eczane_id': ilac[5]})
     conn.commit()
 
@@ -113,28 +114,16 @@ def removeMedicine():
     if request.json is not None:
         eczaneId = request.json['eczane_id']
         ilacId = request.json['ilac_id']
-        ilac = tekilac(ilacId)
-        if ilac.json is not None:
-            print(ilac.json[1])
-            envanter = ilac.json[1]['envanter']
-        else:
-            return 'ilac_id must be defined', 400
     else:
         return 'eczane_id must be defined', 400
 
     cur = conn.cursor()
 
     try:
-        print(envanter)
-        if (envanter-1 <= 0):
-            deleteQuery = '''DELETE FROM ilac WHERE ilac_id=%s; '''
-            cur.execute(deleteQuery, (ilacId,))
-
-        else:
-            updateQuery = ''' update ilac
-            set envanter = envanter - 1 
-            where ilac_id = %s and ilac.eczane_id = %s'''
-            cur.execute(updateQuery, (ilacId, eczaneId,))
+        updateQuery = ''' update ilac
+        set envanter = envanter - 1 
+        where ilac_id = %s and ilac.eczane_id = %s'''
+        cur.execute(updateQuery, (ilacId, eczaneId,))
     except:
         return jsonify({"message": "bir hata olustu"})
     conn.commit()

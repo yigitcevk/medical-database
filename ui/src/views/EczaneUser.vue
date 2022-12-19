@@ -30,6 +30,9 @@
                 Hastanın ilacı ve fiyatı: {{ tekilac }} {{ ilacfiyati }} tl
 
             </p>
+            <p v-if="this.alertVis">
+                İlacı almak için aktif olarak seçilmeli.
+            </p>
         </div>
         <div>
 
@@ -37,13 +40,18 @@
                 <thead>
                     <tr>
                         <th>Eczanede bulunan ilaçlar</th>
+                        <th>İlaç Sayısı</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr v-for="item in ilaclar" :key="item.ilac_id">
                         <td>{{ item.ilac_ad }}</td>
+                        <td>{{ item.envanter }}</td>
                         <td><button class='button-black' @click="makeActive(item.ilac_id)">
                                 Aktif ilaç olarak seç
+                            </button></td>
+                        <td><button class='button-black' @click="removeMedicine(item.ilac_id)">
+                                İlacı Al
                             </button></td>
                     </tr>
                 </tbody>
@@ -75,7 +83,8 @@ export default {
             eczane_ad: "",
             il: "",
             tekilac: "",
-            ilacfiyati: ""
+            ilacfiyati: "",
+            alertVis: false
         }
     },
     created() {
@@ -175,7 +184,7 @@ export default {
             });
     },
     methods: {
-        makeActive(ilac_id){
+        makeActive(ilac_id) {
             let data = JSON.stringify({ "tcNum": this.tcNum, "ilac_id": ilac_id });
             const url5 = 'http://127.0.0.1:5000/makeActive';
             fetch(url5, {
@@ -192,6 +201,31 @@ export default {
                 console.error(error);
             });
             this.resetPage()
+        },
+        removeMedicine(ilac_id) {
+            console.log(ilac_id)
+
+            if (this.ilac_id == ilac_id) {
+                let data = JSON.stringify({ "ilac_id": ilac_id, "eczane_id": this.eczaneId });
+                const url5 = 'http://127.0.0.1:5000/removeMedicine';
+                fetch(url5, {
+                    method: 'post',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: data
+                }).then(function (response) {
+                    console.log(response)
+                }).then(function (text) {
+                    console.log(text);
+                }).catch(function (error) {
+                    console.error(error);
+                });
+                this.resetPage();
+            }
+            else {
+                this.alertVis = true;
+            }
         },
         resetPage() {
             setTimeout(function () { window.location.reload() }, 500);
